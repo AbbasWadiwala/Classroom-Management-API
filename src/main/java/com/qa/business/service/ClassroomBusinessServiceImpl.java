@@ -6,8 +6,7 @@ import com.qa.persistence.domain.Classroom;
 import com.qa.persistence.repository.ClassroomRepository;
 import com.qa.utils.JSONUtil;
 
-public class ClassroomBusinessServiceImpl implements ClassroomBusinessService{
-	
+public class ClassroomBusinessServiceImpl implements ClassroomBusinessService{	
 	
 	@Inject
 	private ClassroomRepository repo;
