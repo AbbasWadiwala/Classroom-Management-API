@@ -14,7 +14,6 @@ import javax.persistence.Table;
 @Entity(name = "Classroom")
 @Table(name = "classroom")
 public class Classroom {
-	
 	@Id
 	@GeneratedValue
 	private Long classroomID;

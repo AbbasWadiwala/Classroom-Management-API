@@ -5,11 +5,11 @@ import com.qa.persistence.domain.Classroom;
 public interface ClassroomRepository {
 	String findAllClassroom();
 
-	String findAClassroom(Integer classroomIDOfClassroomToBeFound);
+	String findAClassroom(Long classroomIDOfClassroomToBeFound);
 
-	String updateAClassroom(Classroom classroomWithNewUpdatedDetails, Integer classroomIDOfClassroomToUpdated);
+	String updateAClassroom(Classroom classroomWithNewUpdatedDetails, Long classroomIDOfClassroomToUpdated);
 
 	String createClassroom(Classroom classroomToBeCreated);
 
-	String delete(Integer classroomIDOfClassroomToBeDeleted);
+	String delete(Long classroomIDOfClassroomToBeDeleted);
 }
