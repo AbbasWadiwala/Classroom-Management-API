@@ -3,7 +3,6 @@ package com.qa.persistence.repository;
 import static javax.transaction.Transactional.TxType.REQUIRED;
 import static javax.transaction.Transactional.TxType.SUPPORTS;
 
-import java.util.List;
 
 import javax.enterprise.inject.Default;
 import javax.faces.bean.RequestScoped;
@@ -13,7 +12,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import com.qa.persistence.domain.Classroom;
-import com.qa.persistence.domain.Trainee;
+
 import com.qa.utils.JSONUtil;
 
 @RequestScoped
@@ -33,34 +32,40 @@ public class ClassroomPersistenceDBRepositoryImpl implements ClassroomRepository
 
 	@Override
 	public String findAClassroom(Long classroomIDOfClassroomToBeFound) {
-		List<Trainee> trainees = manager.createQuery(
-			    "select t " +
-			    "from Trainee t " +
-			    "where t.classroom.classroom_id = :classroomId", Trainee.class)
-			.setParameter( "classroomId", classroomIDOfClassroomToBeFound )
-			.getResultList();
-		return JSONUtil.getJSONForObject(trainees);
+		return JSONUtil.getJSONForObject(manager.find(Classroom.class, classroomIDOfClassroomToBeFound));
 	}
 
 	@Override
 	@Transactional(REQUIRED)
 	public String updateAClassroom(Classroom classroomWithNewUpdatedDetails, Long classroomIDOfClassroomToUpdated) {
-		// TODO Auto-generated method stub
-		return null;
+		Classroom classroomToBeUpdated = manager.find(Classroom.class, classroomIDOfClassroomToUpdated);
+		classroomToBeUpdated.setTrainees(classroomWithNewUpdatedDetails.getTrainees());
+		classroomToBeUpdated.setTrainer(classroomWithNewUpdatedDetails.getTrainer());
+		manager.merge(classroomToBeUpdated);
+		return "Account Updated Successfully";
+		//return JSONUtil.getJSONForObject(manager.find(Classroom.class, classroomToBeUpdated.getClassroomID()));
 	}
 
 	@Override
 	@Transactional(REQUIRED)
 	public String createClassroom(Classroom classroomToBeCreated) {
-		// TODO Auto-generated method stub
-		return null;
+		manager.persist(classroomToBeCreated);		
+		if(manager.find(Classroom.class, classroomToBeCreated.getClassroomID()) != null){
+			return "Account Created Successfully :- \n" + JSONUtil.getJSONForObject(manager.find(Classroom.class, classroomToBeCreated.getClassroomID()));
+		}
+		return "Account Was Not Created Successfully";
 	}
 
 	@Override
 	@Transactional(REQUIRED)
 	public String delete(Long classroomIDOfClassroomToBeDeleted) {
-		// TODO Auto-generated method stub
-		return null;
+		Classroom accountToBeDeleted = manager.find(Classroom.class, classroomIDOfClassroomToBeDeleted);
+		manager.remove(accountToBeDeleted);
+		if(manager.find(Classroom.class, accountToBeDeleted.getClassroomID()) == null){
+			return "Account Successfully Deleted";
+		}
+		return "Failed to Delete";
+		
 	}
 
 }

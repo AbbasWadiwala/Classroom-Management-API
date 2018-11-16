@@ -1,33 +1,37 @@
 package com.qa.persistence.domain;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
 
 @Entity(name = "Classroom")
-@Table(name = "classroom")
 public class Classroom {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long classroomID;
 	
 	@Column(length = 30)
 	private String trainer;
 	
-	@OneToMany(
-		mappedBy = "classroom",
-		cascade = CascadeType.ALL,
-		orphanRemoval = true
-	)
-	private List<Trainee> trainees = new ArrayList<Trainee>();
+	@OneToMany(cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
+	private List<Trainee> trainees;
 
+	public Classroom(String trainer) {
+		super();
+		this.trainer = trainer;
+	}
+	
+	public Classroom() {};
+	
 	public Long getClassroomID() {
 		return classroomID;
 	}
@@ -51,17 +55,9 @@ public class Classroom {
 	public void setTrainees(List<Trainee> trainees) {
 		this.trainees = trainees;
 	}
-	
-	
-	public void addTrainee(Trainee traineeToBeAdded) {
-		trainees.add(traineeToBeAdded);
-		traineeToBeAdded.setClassroom(this);
-    }
- 
-    public void removeTrainee(Trainee traineeToBeRemoved) {
-    	trainees.remove(traineeToBeRemoved);
-        traineeToBeRemoved.setClassroom(null);
-    }
+		
+	 
+   
 	
 	
 }
